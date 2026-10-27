@@ -1,0 +1,23 @@
+{% extends "incidents/base.html" %}
+{% block content %}
+<h1>#{{ incident.id }} {{ incident.title }}</h1>
+<div class="box">
+  <p><span class="badge sev-{{ incident.severity }}">{{ incident.get_severity_display }}</span>
+     &nbsp; {{ incident.get_incident_type_display }} &nbsp;|&nbsp; Status: <b>{{ incident.get_status_display }}</b></p>
+  <p>{{ incident.description }}</p>
+  <p style="color:#94a3b8">Reported: {{ incident.reported_at }} | Assigned to: {{ incident.assigned_to|default:"nobody" }}</p>
+  {% if incident.resolution_notes %}
+  <p><b>Resolution notes:</b> {{ incident.resolution_notes }}</p>
+  {% endif %}
+</div>
+
+<div class="box">
+  <h3>Update incident</h3>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Save changes</button>
+  </form>
+</div>
+<a href="{% url 'incident_list' %}">← Back to list</a>
+{% endblock %}

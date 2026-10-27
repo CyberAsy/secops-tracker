@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SecOps Tracker</title>
+<style>
+:root{--bg:#080d18;--panel:#0f1729;--panel2:#131d34;--blue:#7ea6e0;--cyan:#5fb4e8;--text:#dfe6f2;--muted:#7d8aa5;--line:#1f2d4a}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif;line-height:1.6;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%237ea6e0' stroke-width='2' opacity='0.12' transform='rotate(-14 80 80)'%3E%3Cpath d='M62 70V56a18 18 0 0 1 36 0v14'/%3E%3Crect x='52' y='70' width='56' height='44' rx='6'/%3E%3Ccircle cx='80' cy='88' r='5'/%3E%3Cpath d='M80 93v10'/%3E%3C/g%3E%3Cg fill='none' stroke='%237ea6e0' stroke-width='2.5' opacity='0.08' transform='translate(95 5) scale(.45)'%3E%3Cpath d='M62 70V56a18 18 0 0 1 36 0v14'/%3E%3Crect x='52' y='70' width='56' height='44' rx='6'/%3E%3Ccircle cx='80' cy='88' r='5'/%3E%3Cpath d='M80 93v10'/%3E%3C/g%3E%3C/svg%3E"),
+linear-gradient(rgba(126,166,224,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(126,166,224,.035) 1px,transparent 1px);
+background-size:160px 160px,40px 40px,40px 40px}
+nav{background:linear-gradient(180deg,#0c1426,#0a1020);border-bottom:2px solid var(--blue);box-shadow:0 4px 24px rgba(126,166,224,.15);padding:14px 28px;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+nav a{color:var(--text);text-decoration:none;font-size:14px;letter-spacing:1px;text-transform:uppercase}
+nav a:hover{color:var(--blue)}
+nav .brand{color:var(--blue);font-size:21px;font-weight:700;letter-spacing:2px;margin-right:auto}
+nav .brand small{display:block;font-family:Consolas,"Courier New",monospace;font-size:10px;color:var(--cyan);letter-spacing:3px;font-weight:400}
+.status{font-family:Consolas,"Courier New",monospace;font-size:11px;color:var(--cyan);letter-spacing:1px}
+.status::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--cyan);margin-right:6px;box-shadow:0 0 8px var(--cyan);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.container{max-width:1000px;margin:32px auto;padding:0 18px}
+h1{color:var(--blue);font-size:30px;margin:0 0 22px;padding-bottom:10px;border-bottom:1px solid var(--blue);letter-spacing:1px}
+h1::before{content:"◈ ";color:var(--cyan);font-size:22px}
+h3{color:var(--blue);margin-top:0;letter-spacing:1px}
+a{color:var(--cyan);text-decoration:none}
+a:hover{color:var(--blue)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:26px}
+.card{background:var(--panel);border:1px solid var(--line);border-top:2px solid var(--blue);border-radius:3px;padding:18px;box-shadow:0 0 18px rgba(126,166,224,.07)}
+.card h3{margin:0;font-family:Consolas,"Courier New",monospace;font-size:11px;color:var(--muted);font-weight:400;text-transform:uppercase;letter-spacing:2px}
+.card .num{font-family:Consolas,"Courier New",monospace;font-size:38px;font-weight:700;margin-top:6px;color:var(--cyan);text-shadow:0 0 14px rgba(95,180,232,.5)}
+.card .num[style*="f87171"]{color:#ff5c6c!important;text-shadow:0 0 14px rgba(255,92,108,.55)}
+.card .num[style*="4ade80"]{color:#5be39a!important;text-shadow:0 0 14px rgba(91,227,154,.5)}
+.box{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--blue);border-radius:3px;padding:22px;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line)}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+td{font-family:Consolas,"Courier New",monospace;font-size:14px}
+th{background:var(--panel2);color:var(--blue);font-size:12px;font-weight:400;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid var(--blue)}
+tr:hover td{background:rgba(126,166,224,.07)}
+.badge{padding:3px 12px;border-radius:2px;font-family:Consolas,"Courier New",monospace;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border:1px solid;background:transparent}
+.sev-low{color:#5be39a;border-color:#5be39a;box-shadow:0 0 8px rgba(91,227,154,.35)}
+.sev-medium{color:#ffd23f;border-color:#ffd23f;box-shadow:0 0 8px rgba(255,210,63,.35)}
+.sev-high{color:#ff9140;border-color:#ff9140;box-shadow:0 0 8px rgba(255,145,64,.4)}
+.sev-critical{color:#ff5c6c;border-color:#ff5c6c;box-shadow:0 0 10px rgba(255,92,108,.55)}
+input,select,textarea{background:#060a14;color:var(--text);border:1px solid var(--line);border-radius:3px;padding:10px;width:100%;font-family:Consolas,"Courier New",monospace;font-size:14px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 10px rgba(126,166,224,.35)}
+.btn{background:transparent;color:var(--blue);border:1px solid var(--blue);padding:10px 24px;border-radius:3px;cursor:pointer;font-family:Georgia,serif;font-size:14px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--blue);color:#080d18;box-shadow:0 0 18px rgba(126,166,224,.5)}
+.filters{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.filters>*{flex:1;min-width:140px}
+.row{margin-bottom:14px}
+label{display:block;margin-bottom:4px;color:var(--muted);font-family:Consolas,"Courier New",monospace;font-size:11px;text-transform:uppercase;letter-spacing:2px}
+.bar{background:#060a14;border:1px solid var(--line);height:10px}
+.bar>div{background:linear-gradient(90deg,var(--blue),var(--cyan));height:100%;box-shadow:0 0 10px rgba(95,180,232,.5)}
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">🛡 SECOPS TRACKER<small>// SECURITY OPERATIONS CENTER</small></span>
+  <a href="{% url 'dashboard' %}">Dashboard</a>
+  <a href="{% url 'incident_list' %}">Incidents</a>
+  <a href="{% url 'incident_create' %}">+ New</a>
+  <span class="status">SYSTEM SECURE</span>
+</nav>
+<div class="container">
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>

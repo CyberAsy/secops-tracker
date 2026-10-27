@@ -1,0 +1,35 @@
+{% extends "incidents/base.html" %}
+{% block content %}
+<h1>Dashboard</h1>
+<div class="cards">
+  <div class="card"><h3>Total</h3><div class="num">{{ total }}</div></div>
+  <div class="card"><h3>Open</h3><div class="num">{{ open_count }}</div></div>
+  <div class="card"><h3>Critical</h3><div class="num" style="color:#f87171">{{ critical_count }}</div></div>
+  <div class="card"><h3>Resolved / Closed</h3><div class="num" style="color:#4ade80">{{ resolved_count }}</div></div>
+</div>
+
+<div class="box">
+  <h3>Incidents by type</h3>
+  {% for r in by_type %}
+  <div class="row">
+    <label>{{ r.label }} ({{ r.n }})</label>
+    <div class="bar"><div style="width:{{ r.pct }}%"></div></div>
+  </div>
+  {% empty %}
+  <p>No incidents yet.</p>
+  {% endfor %}
+</div>
+
+<h3>Recent incidents</h3>
+<table>
+  <tr><th>Title</th><th>Type</th><th>Severity</th><th>Status</th></tr>
+  {% for i in recent %}
+  <tr>
+    <td><a href="{% url 'incident_detail' i.pk %}">{{ i.title }}</a></td>
+    <td>{{ i.get_incident_type_display }}</td>
+    <td><span class="badge sev-{{ i.severity }}">{{ i.get_severity_display }}</span></td>
+    <td>{{ i.get_status_display }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

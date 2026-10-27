@@ -1,0 +1,11 @@
+{% extends "incidents/base.html" %}
+{% block content %}
+<h1>Report new incident</h1>
+<div class="box">
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Create incident</button>
+  </form>
+</div>
+{% endblock %}
